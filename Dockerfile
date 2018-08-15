@@ -1,12 +1,10 @@
-FROM blacklabelops/java:server-jre.8
-MAINTAINER Steffen Bleul <sbl@blacklabelops.com>
+FROM darenjacobs/java:latest
+
 
 ARG CONFLUENCE_VERSION=6.10.1
 # permissions
 ARG CONTAINER_UID=1000
 ARG CONTAINER_GID=1000
-# Image Build Date By Buildsystem
-ARG BUILD_DATE=undefined
 # Language Settings
 ARG LANG_LANGUAGE=en
 ARG LANG_COUNTRY=US
@@ -28,17 +26,13 @@ RUN export CONTAINER_USER=confluence                &&  \
 
     apk add --update                                    \
       ca-certificates                                   \
-      gzip                                              \
-      curl                                              \
-      tar                                               \
       xmlstarlet                                        \
       msttcorefonts-installer                           \
-      ttf-dejavu					\
+      ttf-dejavu					                              \
       fontconfig                                        \
-      ghostscript					\
+      ghostscript					                              \
       graphviz                                          \
-      motif						\
-      wget                                          &&  \
+      motif						                              &&  \
     # Installing true type fonts
     update-ms-fonts                                 && \
     fc-cache -f                                     && \
@@ -84,15 +78,6 @@ RUN export CONTAINER_USER=confluence                &&  \
     rm -rf /var/cache/apk/*                         &&  \
     rm -rf /tmp/*                                   &&  \
     rm -rf /var/log/*
-
-# Image Metadata
-LABEL com.blacklabelops.application.confluence.version=$CONFLUENCE_VERSION \
-      com.blacklabelops.application.confluence.setting.language=$LANG_LANGUAGE \
-      com.blacklabelops.application.confluence.setting.country=$LANG_COUNTRY \
-      com.blacklabelops.application.confluence.userid=$CONTAINER_UID \
-      com.blacklabelops.application.confluence.groupid=$CONTAINER_GID \
-      com.blacklabelops.application.version.jdbc-mysql=$MYSQL_DRIVER_VERSION \
-      com.blacklabelops.image.builddate.confluence=${BUILD_DATE}
 
 # Expose default HTTP connector port.
 EXPOSE 8090 8091
